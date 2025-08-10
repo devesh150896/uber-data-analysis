@@ -4,6 +4,7 @@ from pyspark.sql.window import Window
 from pyspark.sql.types import *
 
 spark =SparkSession.builder.appName("uber-data-analysis").master("local[*]").getOrCreate()
+spark.sparkContext.setLogLevel("OFF")
 df = spark.read.csv("data/dataset.csv", inferSchema=True, header=True)
 
 spark.conf.set("spark.sql.session.timeZone", "UTC")        # optional
@@ -25,7 +26,7 @@ print("SOL1====>", in_desc)
 sol_1=completed_trips_sum.sort(col("total_trips").desc()).select("Date").first()["Date"]
 print("SOL====>", sol_1)
 ###########################################################################################################################
-print("Q2====>What was the highest number of completed trips within a 24 hour period")
+print("Q2====>What was the highest number of completed trips within a 24 hour period ?")
 
 desc_sort_df = df.groupBy("Date").agg(sum("completed trips ").alias("total_complete")).sort(col("total_complete").desc())
 sol_2 = desc_sort_df.first()["total_complete"]
